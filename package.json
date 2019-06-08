@@ -1,0 +1,29 @@
+{
+  "name": "indic8",
+  "version": "1.0.0",
+  "description": "Work status and project indicator using Blinkstick used by Leaving Endora.",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test.js",
+    "server": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leavingendora/indic8.git"
+  },
+  "author": "mago",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/leavingendora/indic8/issues"
+  },
+  "homepage": "https://github.com/leavingendora/indic8#readme",
+  "dependencies": {
+    "blinkstick-n9": "^1.1.7",
+    "bulma": "^0.7.5",
+    "electron": "^5.0.2",
+    "jayson": "^3.0.2",
+    "vue": "^2.6.10",
+    "zip-db": "^1.3.0"
+  }
+}

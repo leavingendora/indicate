@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+
+<head>
+  <meta charset="UTF-8">
+  <title>clipper</title>
+  <link rel="stylesheet" href="node_modules/bulma/css/bulma.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+
+<body>
+  <main id='app'>
+  <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+    <div class="tabs is-fullwidth">
+      <ul>
+        <li v-bind:class="{ 'is-active': tab == 'projects' }" @click="tab = 'projects'"><a>Projects</a></li>
+        <li v-bind:class="{ 'is-active': tab == 'options' }" @click="tab = 'options'"><a>Config</a></li>
+        <li><button class="delete is-pulled-right"></button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div v-show="tab == 'projects'">
+      {{data[0].name}}
+    </div>
+    <div v-show="tab == 'options'">
+        options<br>
+
+        Log History
+        <input class="slider" step="10" min="0" max="20" value="0" type="range">
+
+        Tags https://wikiki.github.io/form/tagsinput/
+        <input class="input" type="tags" placeholder="Add Tag" value="Tag1,Tag2,Tag3">
+    </div>
+  </div>
+
+  </main>
+
+
+
+
+  </main>
+  <script>
+    // You can also require other files to run in this process
+
+    require('./renderer.js')
+  </script>
+</body>
+
+</html>
