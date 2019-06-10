@@ -15,7 +15,7 @@ const client = jayson.client.http({
 var App = new Vue({
   el: '#app',
   data: {
-    title: 'indic8',
+    title: 'indicate',
     tab: 'projects',
     data: []
   },
