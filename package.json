@@ -21,6 +21,7 @@
   "dependencies": {
     "blinkstick-n9": "^1.1.7",
     "bulma": "^0.7.5",
+    "bulma-iconpicker": "^2.1.0",
     "electron": "^5.0.2",
     "jayson": "^3.0.2",
     "vue": "^2.6.10",

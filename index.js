@@ -1,12 +1,9 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, Tray} = require('electron');
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let tray = null;
-
-
 
 
 
@@ -22,7 +19,7 @@ let tray = null;
 //   console.log(response.result);
 // });
 
-// client.request('addProject', { name: 'indic8', icon: 'none', color: {r: 128, g: 0, b: 0}}, function(err, response) {
+// client.request('addProject', { name: 'wanderjam', icon: 'none', color: {r: 128, g: 0, b: 0}}, function(err, response) {
 //   if(err) throw err;
 //   console.log(response.result);
 // });

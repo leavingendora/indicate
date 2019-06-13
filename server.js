@@ -44,17 +44,11 @@ const server = jayson.server({
             status: 'open',
             icon: "",
             time: 0,
-            color: {
-                r: 0,
-                g: 0,
-                b: 0
-            }
+            color: "#000000"
         };
         entry.name = args.name;
         entry.icon = args.icon;
-        entry.color.r = args.color.r;
-        entry.color.g = args.color.g;
-        entry.color.b = args.color.b;
+        entry.color = args.color;
         let result = projectsDb.add(entry);
         db.persist();
         callback(null, result);
@@ -63,7 +57,7 @@ const server = jayson.server({
     delProject: function(args, callback) {
         projectsDb.removeById(args.id);
         db.persist();
-        callback(null, result);
+        callback(null, "done");
     }
 });
 

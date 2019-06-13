@@ -8,6 +8,7 @@ const client = jayson.client.http({
 
 
 
+
 // https://stackoverflow.com/questions/49745497/how-to-display-async-data-in-vue-template
 
 
@@ -17,30 +18,45 @@ var App = new Vue({
   data: {
     title: 'indicate',
     tab: 'projects',
-    data: []
+    data: [],
+    loading: true,
+    project_name: "",
+    project_color: "#FF0000",
+    project_icon: "fa-star",
+    project_state: ""
   },
   created() {
-    client.request('get', null, function(err, response) {
-      if(err) throw err;
-      self.data = response.result;
-      console.log(self.data);
-    });
-  },
-  filters: {
-    formateDate: function(value) {
-      if (value) {
-        return moment(String(value)).format('DD/MM/YYYY HH:mm');
-        //return true
-      }
-    }
-  },
-  computed: {
+    this.getProjectDataFromServer()
   },
   methods: {
+    getProjectDataFromServer() {
+      client.request('get', null, (err, response) => {
+        if(err) throw err;
+        this.data = response.result;
+        this.loading = false;
+        console.log(this.data);
+      });
+    },
 
+    removeFromDB(item) {
+      if (item.status === 'closed') {
+        client.request('delProject', item, (err, response) => {
+          if(err) throw err;
+        });
+      } else {
+        throw "Project not closed";
+      }
+
+    },
+    addProjectToDB() {
+      client.request('addProject', {name: this.project_name, icon: this.project_icon, color: this.project_color}, (err, response) => {
+        if(err) throw err;
+        console.log(response.result);
+        this.getProjectDataFromServer();
+      });
+    }
 
 
   }
-
 });
 

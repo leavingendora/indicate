@@ -1,0 +1,95 @@
+html {
+  background-color: #21252b;
+}
+
+pre {
+  background-color: #282c34 !important;
+  color: #abb2bf
+}
+
+.navbar {
+  background-color: transparent !important;
+}
+
+.delete{
+  margin-right: 10px;
+}
+
+.tabs {
+  background-color: #282c34;
+}
+
+.tabs ul {
+  border-bottom-width: 1px;
+  border-color: #383e4a;
+}
+
+.tabs a {
+  border-bottom-width: 1px;
+  border-color: transparent;
+  color: #909295;
+}
+
+.tabs a:hover {
+  border-bottom-color: #bbbbbb;
+  color: #bbbbbb;
+}
+
+.tabs li.is-active a {
+  border-bottom-color: #56b6c2;
+  color: #56b6c2;
+}
+
+
+
+
+.message {
+  border-radius: 0px;
+  margin-bottom: 0.6rem !important;
+}
+
+.message-body {
+  background-color: #282c34;
+  border-radius: 0px;
+  border-color: #383e4a;
+  border-width: 0 0 0 16px;
+  color: #c9c9c9;
+}
+
+.message-header {
+  padding: 0.2em 0.4em;
+  background-color: #21252b;
+  border-radius: 0px;
+  font-weight: 200;
+  font-size: 0.6rem;
+
+}
+
+.button.is-danger.is-outlined {
+  border: 0px;
+  color: #e06c75;
+}
+
+.button.is-danger.is-outlined:hover {
+  color: #282c34;
+  background-color: #e06c75 !important;
+}
+
+.button.is-primary.is-outlined {
+  border: 0px;
+  color: #56b6c2;
+}
+
+.button.is-primary.is-outlined:hover {
+  color: #282c34;
+  background-color: #56b6c2 !important;
+}
+
+.button.is-small {
+  border-radius: 0px;
+  font-size: 0.6rem;
+}
+
+.content {
+  padding: 1rem;
+}
