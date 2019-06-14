@@ -39,7 +39,7 @@ var App = new Vue({
     },
 
     removeFromDB(item) {
-      if (item.status === 'closed') {
+      if (item.status === 'open') {
         client.request('delProject', item, (err, response) => {
           if(err) throw err;
         });

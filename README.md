@@ -9,6 +9,8 @@ Work status and project indicator using Blinkstick used by Leaving Endora.
 * Server script
 * Project selection
 * Stretch & Relax module
+  * BrainFlood
+  * Meditation 
 
 ## Todos
 

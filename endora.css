@@ -52,8 +52,10 @@ pre {
   background-color: #282c34;
   border-radius: 0px;
   border-color: #383e4a;
-  border-width: 0 0 0 16px;
+  border-width: 0 0 0 24px;
   color: #c9c9c9;
+  padding: 1em 1em;
+  font-size: 14px;
 }
 
 .message-header {
@@ -63,6 +65,10 @@ pre {
   font-weight: 200;
   font-size: 0.6rem;
 
+}
+
+.message-body:hover {
+  background-color: #363b44;
 }
 
 .button.is-danger.is-outlined {
