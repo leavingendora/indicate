@@ -40,7 +40,9 @@ pre {
   color: #56b6c2;
 }
 
-
+article > .active {
+  background-color: #363b44;
+}
 
 
 .message {
@@ -97,5 +99,5 @@ pre {
 }
 
 .content {
-  padding: 1rem;
+  padding: 0.5rem;
 }

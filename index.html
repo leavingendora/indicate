@@ -18,9 +18,9 @@
   <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="tabs is-fullwidth">
       <ul>
-        <li v-bind:class="{ 'is-active': tab == 'projects' }" @click="tab = 'projects'"><a>Projects</a></li>
-        <li v-bind:class="{ 'is-active': tab == 'options' }" @click="tab = 'options'"><a>Config</a></li>
-        <li><button class="delete is-pulled-right"></button></li>
+        <li v-bind:class="{ 'is-active': tab == 'projects' }" @click="tab = 'projects'"><a><i class="fas fa-project-diagram"></i></a></li>
+        <li v-bind:class="{ 'is-active': tab == 'add' }" @click="tab = 'add'"><a><i class="fas fa-plus-square"></i></a></li>
+        <li v-bind:class="{ 'is-active': tab == 'mind' }" @click="tab = 'mind'"><a><i class="fas fa-spa"></i></a></li>
       </ul>
     </div>
   </nav>
@@ -29,24 +29,42 @@
     <div v-show="tab == 'projects'">
 
       <template v-if="loading">
-        LOADING
+          <div class="notification is-info">
+            <strong>LOADING...</strong>
+            <progress class="progress is-small is-primary" max="100">15%</progress>
+          </div>
       </template>
-      <template v-else>
 
+      <template v-else>
+        <article class="message">
+            <div class="message-body"
+              v-bind:class="{ active: selected_project === null }"
+              v-on:click="unsetProject()">
+            <nav class="level is-mobile">
+              <div class="level-left"> 
+                <div class="level-item"><i class="fas fa-power-off"></i></div>
+                <div class="level-item">Turn Off</div>
+              </div>
+            </nav>
+          </div>
+        </article>
         <article class="message" v-for="item in data">
-          <div class="message-body"  v-bind:style="{borderColor: item.color}">
+          <div class="message-body"
+            v-bind:style="{borderColor: item.color}"
+            v-bind:class="{ active: selected_project === item.id }"
+            v-on:click="setProject(item)"
+            >
             <nav class="level is-mobile">
               <div class="level-left"> 
                 <div class="level-item"><i v-bind:class="item.icon"></i></div>
                 <div class="level-item">{{ item.name }}</div>
               </div>
               <div class="level-right">
-                  <div class="level-item"><i class="far fa-clock"></i></div>
-                  <div class="level-item">{{ item.time }}</div>
+                <div class="level-item"><i class="far fa-star" v-on:click="star(item)" v-on:click.stop></i></div>
+                <div class="level-item"><i class="far fa-clock"></i></div>
+                <div class="level-item">{{ item.time }}</div>
               </div>
             </nav>
-            
-            
           </div>
         </article>
 
@@ -56,7 +74,7 @@
 
 
     </div>
-    <div v-show="tab == 'options'">
+    <div v-show="tab == 'add'">
       <template v-if="loading">
         LOADING
       </template>

@@ -1,12 +1,14 @@
 const {clipboard} = require('electron');
 const Vue = require('vue/dist/vue.js');
 const jayson = require("jayson");
+// const blinkstick = require('blinkstick-n9');
 
 const client = jayson.client.http({
   port: 3000
 });
 
 
+//device = blinkstick.findFirst();
 
 
 // https://stackoverflow.com/questions/49745497/how-to-display-async-data-in-vue-template
@@ -23,7 +25,8 @@ var App = new Vue({
     project_name: "",
     project_color: "#FF0000",
     project_icon: "fa-star",
-    project_state: ""
+    project_state: "",
+    selected_project: null
   },
   created() {
     this.getProjectDataFromServer()
@@ -54,6 +57,31 @@ var App = new Vue({
         console.log(response.result);
         this.getProjectDataFromServer();
       });
+    },
+    star(item) {
+      console.log("star it");
+    },
+    setProject(item) {
+      // console.log("project");
+      // console.log(this.hexToRgb(item.color));
+      // if (device) {
+      //   device.pulse(item.color, () => {
+      //     device.setColor(item.color);
+      //   });
+      // }
+      this.selected_project = item.id;
+
+    },
+    unsetProject() {
+      this.selected_project = null;
+    },
+    hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
     }
 
 
