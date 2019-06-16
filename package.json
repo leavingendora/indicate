@@ -19,12 +19,15 @@
   },
   "homepage": "https://github.com/leavingendora/indicate#readme",
   "dependencies": {
-    "blinkstick-n9": "^1.1.7",
+    "blinkstick": "git+https://github.com/leavingendora/blinkstick-node.git",
     "bulma": "^0.7.5",
     "bulma-iconpicker": "^2.1.0",
     "electron": "^5.0.2",
     "jayson": "^3.0.2",
     "vue": "^2.6.10",
     "zip-db": "^1.3.0"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^1.8.5"
   }
 }
