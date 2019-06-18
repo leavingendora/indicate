@@ -44,6 +44,20 @@ article > .active {
   background-color: #363b44;
 }
 
+.project {
+  border-width: 0 0 0 24px;
+  border-radius: 0px;
+  background-color: #282c34;
+  border-color: #383e4a;
+  color: #c9c9c9;
+  margin-bottom: 0.6rem !important;
+  font-size: 14px;
+  height: 50px;
+}
+
+.project-body {
+  width: 98%;
+}
 
 .message {
   border-radius: 0px;

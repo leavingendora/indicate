@@ -11,10 +11,6 @@ const client = jayson.client.http({
 let device = blinkstick.findFirst();
 
 
-// https://stackoverflow.com/questions/49745497/how-to-display-async-data-in-vue-template
-
-
-
 var App = new Vue({
   el: '#app',
   data: {
@@ -29,9 +25,19 @@ var App = new Vue({
     selected_project: null
   },
   created() {
-    this.getProjectDataFromServer()
+    this.getProjectDataFromServer();
+    setInterval(this.updateTime, 7000);
   },
   methods: {
+    updateTime() {
+      if (this.selected_project !== null) {
+        console.log("updateTime");
+        client.request('updateTime', {id: this.selected_project, time: 1}, (err, response) => {
+          if(err) throw err;
+          this.getProjectDataFromServer();
+        });
+      }
+    },
     getProjectDataFromServer() {
       client.request('get', null, (err, response) => {
         if(err) throw err;
@@ -40,7 +46,6 @@ var App = new Vue({
         console.log(this.data);
       });
     },
-
     removeFromDB(item) {
       if (item.status === 'open') {
         client.request('delProject', item, (err, response) => {
@@ -62,19 +67,16 @@ var App = new Vue({
       console.log("star it");
     },
     setProject(item) {
-      // console.log("project");
-      // console.log(this.hexToRgb(item.color));
       if (device) {
-        device.pulse(item.color, () => {
-          device.setColor(item.color);
-        });
+        device.pulse(item.color, {stay: true, duration: 500});
       }
       this.selected_project = item.id;
-
-
     },
     unsetProject() {
       this.selected_project = null;
+      if (device) {
+        device.setColor(0,0,0);
+      }
     },
     hexToRgb(hex) {
       var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

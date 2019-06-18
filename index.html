@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>clipper</title>
+  <title>indicator-dev</title>
   <link rel="stylesheet" href="node_modules/bulma/css/bulma.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="stylesheet" href="endora.css">
@@ -36,19 +36,47 @@
       </template>
 
       <template v-else>
-        <article class="message">
-            <div class="message-body"
-              v-bind:class="{ active: selected_project === null }"
-              v-on:click="unsetProject()">
-            <nav class="level is-mobile">
-              <div class="level-left"> 
-                <div class="level-item"><i class="fas fa-power-off"></i></div>
-                <div class="level-item">Turn Off</div>
-              </div>
-            </nav>
-          </div>
-        </article>
-        <article class="message" v-for="item in data">
+
+        <button class="button project is-fullwidth"
+          v-bind:class="{ active: selected_project === null }"
+          v-on:click="unsetProject()">
+            <div class="project-body">
+              <nav class="level is-mobile is-fullwidth">
+                <div class="level-left"> 
+                  <div class="level-item"><i class="fas fa-power-off"></i></i></div>
+                  <div class="level-item">test</div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item"><i class="far fa-star" v-on:click.stop></i></div>
+                  <div class="level-item"><i class="far fa-clock"></i></div>
+                  <div class="level-item">0</div>
+                </div>
+              </nav>
+            </div>
+          </button>
+
+
+          <button class="button project is-fullwidth"
+            v-for="item in data"
+            v-bind:class="{ active: selected_project === null }"
+            v-bind:style="{borderColor: item.color}"
+            v-on:click="setProject(item)">
+            <div class="project-body">
+              <nav class="level is-mobile is-fullwidth">
+                <div class="level-left"> 
+                  <div class="level-item"><i v-bind:class="item.icon"></i></div>
+                  <div class="level-item">{{ item.name }}</div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item"><i class="far fa-star" v-on:click="star(item)" v-on:click.stop></i></div>
+                  <div class="level-item"><i class="far fa-clock"></i></div>
+                  <div class="level-item">{{ item.time }}</div>
+                </div>
+              </nav>
+            </div>
+          </button>
+
+        <!-- <article class="message" v-for="item in data">
           <div class="message-body"
             v-bind:style="{borderColor: item.color}"
             v-bind:class="{ active: selected_project === item.id }"
@@ -66,7 +94,7 @@
               </div>
             </nav>
           </div>
-        </article>
+        </article> -->
 
 
 
