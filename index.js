@@ -6,41 +6,6 @@ let mainWindow;
 let tray = null;
 
 
-
-/* =========================================================================== */
-
-
-
-//console.log(client);
-
-
-// client.request('updateStatus', {id: '8r7yxef2jwmjjwz9', status: 'closed'}, function(err, response) {
-//   if(err) throw err;
-//   console.log(response.result);
-// });
-
-// client.request('addProject', { name: 'wanderjam', icon: 'none', color: {r: 128, g: 0, b: 0}}, function(err, response) {
-//   if(err) throw err;
-//   console.log(response.result);
-// });
-
- //client.request('updateTime', id, 10);
-
-
-// client.request('updateTime', {id: '8r7yxef2jwmjjwz9', time: 10}, function(err, response) {
-//   if(err) throw err;
-//   console.log(response.result);
-// });
-
-// client.request('get', null, function(err, response) {
-//   if(err) throw err;
-//   console.log(response.result);
-//   id = response.result[0].id;
-// });
-
-
-
-
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({

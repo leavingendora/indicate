@@ -1,4 +1,3 @@
-const {clipboard} = require('electron');
 const Vue = require('vue/dist/vue.js');
 const jayson = require("jayson");
 const blinkstick = require('blinkstick');
@@ -14,15 +13,22 @@ let device = blinkstick.findFirst();
 var App = new Vue({
   el: '#app',
   data: {
-    title: 'indicate',
     tab: 'projects',
     data: [],
     loading: true,
-    project_name: "",
-    project_color: "#FF0000",
-    project_icon: "fa-star",
-    project_state: "",
-    selected_project: null
+    newProject: {
+      name: "",
+      color: "#FF0000",
+      icon: "fa-star",
+      state: "",
+    },
+    selectedProject: {
+      id: null,
+      name: "",
+      color: "#4a4a4a",
+      dnd: false,
+    },
+    device: device
   },
   created() {
     this.getProjectDataFromServer();
@@ -30,9 +36,9 @@ var App = new Vue({
   },
   methods: {
     updateTime() {
-      if (this.selected_project !== null) {
+      if (this.selectedProject.id !== null) {
         console.log("updateTime");
-        client.request('updateTime', {id: this.selected_project, time: 1}, (err, response) => {
+        client.request('updateTime', {id: this.selectedProject.id, time: 1}, (err, response) => {
           if(err) throw err;
           this.getProjectDataFromServer();
         });
@@ -57,7 +63,7 @@ var App = new Vue({
 
     },
     addProjectToDB() {
-      client.request('addProject', {name: this.project_name, icon: this.project_icon, color: this.project_color}, (err, response) => {
+      client.request('addProject', {name: this.newProject.name, icon: this.newProject.icon, color: this.newProject.color}, (err, response) => {
         if(err) throw err;
         console.log(response.result);
         this.getProjectDataFromServer();
@@ -68,23 +74,32 @@ var App = new Vue({
     },
     setProject(item) {
       if (device) {
-        device.pulse(item.color, {stay: true, duration: 500});
+        device.pulse(item.color, {stay: true, duration: 200});
       }
-      this.selected_project = item.id;
+      this.selectedProject.id = item.id;
+      this.selectedProject.name = item.name;
+      this.selectedProject.color = item.color;
     },
     unsetProject() {
-      this.selected_project = null;
+      this.selectedProject.id = null;
+      this.selectedProject.name = "";
+      this.selectedProject.dnd = false;
+      
       if (device) {
         device.setColor(0,0,0);
       }
     },
-    hexToRgb(hex) {
-      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-      } : null;
+    dnd() {
+      if (device) {
+        if (this.selectedProject.dnd == false) {
+          device.pulse("#EE0000", {stay: true, duration: 200});
+          this.selectedProject.dnd = true;
+       } else {
+          device.pulse(this.selectedProject.color, {stay: true, duration: 200});
+          this.selectedProject.dnd = false;
+       }
+      }
+
     }
 
 

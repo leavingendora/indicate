@@ -44,6 +44,16 @@ article > .active {
   background-color: #363b44;
 }
 
+.button.dnd {
+  background-color: #b1545c;
+  border-color: #b1545c;
+}
+
+.button.powerOff {
+  background-color: #252930;
+  border-color: #252930;
+}
+
 .project {
   border-width: 0 0 0 24px;
   border-radius: 0px;
@@ -52,13 +62,39 @@ article > .active {
   color: #c9c9c9;
   margin-bottom: 0.6rem !important;
   font-size: 14px;
-  height: 50px;
+  height: 40px;
 }
 
 .project-body {
   width: 98%;
 }
 
+.main {
+  padding-bottom: 16px
+}
+
+.project:hover, .project:focus {
+  background-color: #363b44;
+  color: #ffffff;
+  border-width: 0 0 0 28px;
+  outline-style: solid;
+  outline-color: #363b44;
+}
+
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  background-color: #282c34;
+  border-top: 1px solid;
+  border-color: #383e4a;
+  font-size: 14px;
+}
+
+
+/* 
 .message {
   border-radius: 0px;
   margin-bottom: 0.6rem !important;
@@ -72,19 +108,23 @@ article > .active {
   color: #c9c9c9;
   padding: 1em 1em;
   font-size: 14px;
-}
+} */
 
-.message-header {
+/* .message-header {
   padding: 0.2em 0.4em;
   background-color: #21252b;
   border-radius: 0px;
   font-weight: 200;
   font-size: 0.6rem;
 
+} */
+
+i.danger {
+  color: #e06c75;
 }
 
-.message-body:hover {
-  background-color: #363b44;
+i.active {
+  color: #7b9662;
 }
 
 .button.is-danger.is-outlined {

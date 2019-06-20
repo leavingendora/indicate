@@ -1,4 +1,4 @@
-# indic8
+# indicate
 Work status and project indicator using Blinkstick used by Leaving Endora.
 
 ## Project Outlines
