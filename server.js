@@ -19,8 +19,8 @@ const server = jayson.server({
         let request = projectsDb.getAll();
         callback(null, request);
     },
-    updateTime: function(args, callback) {
-        console.log("updateTime");
+    projectUpdateTime: function(args, callback) {
+        console.log("projectUpdateTime");
         let entry = projectsDb.getById(args.id);
         if (entry) {
             entry.time += args.time;

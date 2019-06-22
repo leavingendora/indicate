@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html class="meditate">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" />
+    <link rel="stylesheet" href="endora.css" />
+  </head>
+
+  <body>
+    <div id="meditate" class="meditate-window">
+      {{timeOut}}
+      {{title}}
+      {{type}}
+      <progress class="progress is-cool" value="15" max="100">15%</progress>
+
+    </div>
+
+  <script>
+      require("./meditate.js");
+  </script>
+  </body>
+
+</html>

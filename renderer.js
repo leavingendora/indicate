@@ -2,6 +2,8 @@ const Vue = require('vue/dist/vue.js');
 const jayson = require("jayson");
 const blinkstick = require('blinkstick');
 
+const ipc = require('electron').ipcRenderer
+
 const client = jayson.client.http({
   port: 3000
 });
@@ -19,8 +21,9 @@ var App = new Vue({
     newProject: {
       name: "",
       color: "#FF0000",
-      icon: "fa-star",
+      icon: "fas fa-icons",
       state: "",
+      delete: ""
     },
     selectedProject: {
       id: null,
@@ -31,20 +34,20 @@ var App = new Vue({
     device: device
   },
   created() {
-    this.getProjectDataFromServer();
-    setInterval(this.updateTime, 7000);
+    this.projectGetData();
+    setInterval(this.projectUpdateTime, 7000);
   },
   methods: {
-    updateTime() {
+    projectUpdateTime() {
       if (this.selectedProject.id !== null) {
-        console.log("updateTime");
-        client.request('updateTime', {id: this.selectedProject.id, time: 1}, (err, response) => {
+        console.log("projectUpdateTime");
+        client.request('projectUpdateTime', {id: this.selectedProject.id, time: 1}, (err, response) => {
           if(err) throw err;
-          this.getProjectDataFromServer();
+          this.projectGetData();
         });
       }
     },
-    getProjectDataFromServer() {
+    projectGetData() {
       client.request('get', null, (err, response) => {
         if(err) throw err;
         this.data = response.result;
@@ -52,27 +55,28 @@ var App = new Vue({
         console.log(this.data);
       });
     },
-    removeFromDB(item) {
-      if (item.status === 'open') {
+    projectRemove(item) {
+      if (item.status === 'open' && this.newProject.delete === "DELETE") {
         client.request('delProject', item, (err, response) => {
           if(err) throw err;
+          this.projectGetData();
         });
       } else {
         throw "Project not closed";
       }
 
     },
-    addProjectToDB() {
+    projectAdd() {
       client.request('addProject', {name: this.newProject.name, icon: this.newProject.icon, color: this.newProject.color}, (err, response) => {
         if(err) throw err;
         console.log(response.result);
-        this.getProjectDataFromServer();
+        this.projectGetData();
       });
     },
     star(item) {
       console.log("star it");
     },
-    setProject(item) {
+    projectSet(item) {
       if (device) {
         device.pulse(item.color, {stay: true, duration: 200});
       }
@@ -80,14 +84,16 @@ var App = new Vue({
       this.selectedProject.name = item.name;
       this.selectedProject.color = item.color;
     },
-    unsetProject() {
-      this.selectedProject.id = null;
-      this.selectedProject.name = "";
-      this.selectedProject.dnd = false;
-      
+    projectUnset() {
       if (device) {
         device.setColor(0,0,0);
       }
+      this.selectedProject.id = null;
+      this.selectedProject.name = "";
+      this.selectedProject.dnd = false;
+    },
+    meditate() {
+      ipc.send('meditation-window', {type: 'meditation', timeOut: 10, title: 'Take a deep breath'});
     },
     dnd() {
       if (device) {

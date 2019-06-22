@@ -1,179 +1,300 @@
 <!DOCTYPE html>
 <html class="has-navbar-fixed-top">
+  <head>
+    <meta charset="UTF-8" />
+    <title>indicator-dev</title>
+    <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" />
+    <link rel="stylesheet" href="endora.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>indicator-dev</title>
-  <link rel="stylesheet" href="node_modules/bulma/css/bulma.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-  <link rel="stylesheet" href="endora.css">
+  <body>
+    <div id="app">
+      <nav
+        class="navbar is-fixed-top"
+        role="navigation"
+        aria-label="main navigation"
+      >
+        <div class="tabs is-fullwidth">
+          <ul>
+            <li
+              v-bind:class="{ 'is-active': tab == 'projects' }"
+              @click="tab = 'projects'"
+            >
+              <a><i class="fas fa-project-diagram"></i></a>
+            </li>
+            <li
+              v-bind:class="{ 'is-active': tab == 'add' }"
+              @click="tab = 'add'"
+            >
+              <a><i class="fas fa-plus-square"></i></a>
+            </li>
+            <li
+              v-bind:class="{ 'is-active': tab == 'mind' }"
+              @click="tab = 'mind'"
+            >
+              <a><i class="fas fa-spa"></i></a>
+            </li>
+          </ul>
+        </div>
+      </nav>
 
-</head>
-
-
-
-<body>
-
-
-  <div id='app'>
-    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
-      <div class="tabs is-fullwidth">
-        <ul>
-          <li v-bind:class="{ 'is-active': tab == 'projects' }" @click="tab = 'projects'">
-            <a><i class="fas fa-project-diagram"></i></a>
-          </li>
-          <li v-bind:class="{ 'is-active': tab == 'add' }" @click="tab = 'add'">
-            <a><i class="fas fa-plus-square"></i></a>
-          </li>
-          <li v-bind:class="{ 'is-active': tab == 'mind' }" @click="tab = 'mind'">
-            <a><i class="fas fa-spa"></i></a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <div class="content">
-      <div v-show="tab == 'projects'">
-
-        <template v-if="loading">
-          <div class="notification is-info">
-            <strong>LOADING...</strong>
-            <progress class="progress is-small is-primary" max="100">15%</progress>
-          </div>
-        </template>
-
-        <template v-else>
-
-          <button class="button project is-fullwidth dnd"
-            v-bind:class="{ active: selectedProject.id === null }"
-            v-on:click="dnd()">
-            <div class="project-body">
-              <nav class="level is-mobile is-fullwidth">
-                <div class="level-left">
-                  <div class="level-item"><i class="fas fa-hand-paper"></i></div>
-                  <div class="level-item">Do Not Disturb</div>
-                </div>
-              </nav>
+      <div class="content">
+        <div v-show="tab == 'projects'">
+          <template v-if="loading">
+            <div class="notification is-info">
+              <strong>LOADING...</strong>
+              <progress class="progress is-small is-primary" max="100"
+                >15%</progress
+              >
             </div>
-          </button>
+          </template>
 
-          <button class="button project is-fullwidth powerOff"
-            v-bind:class="{ active: selectedProject.id === null }"
-            v-on:click="unsetProject()">
-            <div class="project-body">
-              <nav class="level is-mobile is-fullwidth">
-                <div class="level-left">
-                  <div class="level-item"><i class="fas fa-power-off"></i></div>
-                  <div class="level-item">Turn Off</div>
+          <template v-else>
+            <button
+              class="button project is-fullwidth dnd"
+              v-bind:class="{ active: selectedProject.id === null }"
+              v-on:click="dnd()"
+            >
+              <div class="project-body">
+                <nav class="level is-mobile is-fullwidth">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <div class="level-item">Do Not Disturb</div>
+                  </div>
+                </nav>
+              </div>
+            </button>
+
+            <button
+              class="button project is-fullwidth powerOff"
+              v-bind:class="{ active: selectedProject.id === null }"
+              v-on:click="projectUnset()"
+            >
+              <div class="project-body">
+                <nav class="level is-mobile is-fullwidth">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <i class="fas fa-power-off"></i>
+                    </div>
+                    <div class="level-item">Turn Off</div>
+                  </div>
+                </nav>
+              </div>
+            </button>
+
+            <button
+              class="button project is-fullwidth"
+              v-for="item in data"
+              v-bind:class="{ active: selectedProject.id === null }"
+              v-bind:style="{borderColor: item.color}"
+              v-on:click="projectSet(item)"
+            >
+              <div class="project-body">
+                <nav class="level is-mobile is-fullwidth">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <i v-bind:class="item.icon"></i>
+                    </div>
+                    <div class="level-item">{{ item.name }}</div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <i
+                        class="far fa-star"
+                        v-on:click="star(item)"
+                        v-on:click.stop
+                      ></i>
+                    </div>
+                    <div class="level-item"><i class="far fa-clock"></i></div>
+                    <div class="level-item">{{ item.time }}</div>
+                  </div>
+                </nav>
+              </div>
+            </button>
+          </template>
+        </div>
+        <div v-show="tab == 'add'">
+          <template v-if="loading">
+            LOADING
+          </template>
+          <template v-else>
+            <h1>Add Project</h1>
+            <div>
+              <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Project Title"
+                    v-model="newProject.name"
+                  />
                 </div>
-              </nav>
-            </div>
-          </button>
-
-          <button class="button project is-fullwidth" v-for="item in data"
-            v-bind:class="{ active: selectedProject.id === null }" v-bind:style="{borderColor: item.color}"
-            v-on:click="setProject(item)">
-            <div class="project-body">
-              <nav class="level is-mobile is-fullwidth">
-                <div class="level-left">
-                  <div class="level-item"><i v-bind:class="item.icon"></i></div>
-                  <div class="level-item">{{ item.name }}</div>
+              </div>
+              <div class="field">
+                <label class="label">Icon</label>
+                <div class="control has-icons-right">
+                  <input
+                    class="input"
+                    type="text"
+                    value="fas fa-icons"
+                    v-model="newProject.icon"
+                  />
+                  <span class="icon is-small is-right">
+                    <i v-bind:class="newProject.icon"></i>
+                  </span>
                 </div>
-                <div class="level-right">
-                  <div class="level-item"><i class="far fa-star" v-on:click="star(item)" v-on:click.stop></i></div>
-                  <div class="level-item"><i class="far fa-clock"></i></div>
-                  <div class="level-item">{{ item.time }}</div>
+                <p class="help">
+                  Pick an Icon from
+                  <a
+                    href="https://fontawesome.com/icons?d=gallery&m=free"
+                    target="_new"
+                    >here</a
+                  >
+                </p>
+              </div>
+              <div class="field">
+                <label class="label">Color</label>
+                <div class="control has-icons-right">
+                  <input
+                    class="input"
+                    type="text"
+                    value="#FF0000"
+                    v-model="newProject.color"
+                  />
+                  <span class="icon is-small is-right">
+                    <div
+                      style="width: 16px; height: 16px"
+                      v-bind:style="{backgroundColor: newProject.color}"
+                    ></div>
+                  </span>
                 </div>
-              </nav>
-            </div>
-          </button>
-
-
-        </template>
-
-
-      </div>
-      <div v-show="tab == 'add'">
-        <template v-if="loading">
-          LOADING
-        </template>
-        <template v-else>
-
-
-          <h1>Projects</h1>
-
-
-          <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
-              <input class="input" type="text" id="title" placeholder="Text input" v-model="newProject.name">
-            </div>
-          </div>
-
-          <input class="input" type="text" id="iconPicker" value="fa-star" v-model="newProject.icon">
-          <input class="input" type="text" id="color" value="#FF0000" v-model="newProject.color">
-
-          <div class="field">
-            <label class="label">Status</label>
-            <div class="control">
-              <div class="select">
-                <select v-model="newProject.state">
-                  <option>open</option>
-                  <option>on hold</option>
-                  <option>closed</option>
-                </select>
+              </div>
+              <div class="field">
+                <label class="label">Status</label>
+                <div class="control">
+                  <div class="select">
+                    <select v-model="newProject.state">
+                      <option>open</option>
+                      <option>on hold</option>
+                      <option>closed</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <button class="button project-add" v-on:click="projectAdd()">
+                    Add Project
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="field is-grouped">
-            <div class="control">
-              <button class="button is-link" v-on:click="addProjectToDB()">Submit</button>
-            </div>
-          </div>
+            <h1>Project Overview</h1>
 
-          <article class="message is-small" v-for="item in data">
-            <div class="message-header">
-              {{ item.name }}
-              <p class="control" @click="removeFromDB(item)">
-                <a class="button is-small is-danger is-outlined">
-                  <span class="icon is-small">
-                    <i class="fas fa-minus-circle"></i>
-                  </span>
-                  <span>Delete</span>
-                </a>
-              </p>
+            <button
+              class="button project is-fullwidth"
+              v-for="item in data"
+              v-bind:style="{borderColor: item.color}"
+            >
+              <div class="project-body">
+                <nav class="level is-mobile is-fullwidth">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <i v-bind:class="item.icon"></i>
+                    </div>
+                    <div class="level-item">{{ item.name }}</div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item"><i class="far fa-clock"></i></div>
+                    <div class="level-item">{{ item.time }}</div>
+
+                    <p class="control">
+                      <a
+                        class="button is-small is-primary is-outlined"
+                        @click="projectEdit(item)"
+                      >
+                        <span class="icon is-small">
+                          <i class="fas fa-edit"></i>
+                        </span>
+                        <span>Edit</span>
+                      </a>
+                      <a
+                        class="button is-small is-danger is-outlined"
+                        @click="projectRemove(item)"
+                      >
+                        <span class="icon is-small">
+                          <i class="fas fa-minus-circle"></i>
+                        </span>
+                        <span>Delete</span>
+                      </a>
+                    </p>
+                  </div>
+                </nav>
+              </div>
+            </button>
+            <div class="field">
+              <label class="label">Delete Confirmation</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Deleting is permanent"
+                  v-model="newProject.delete"
+                />
+              </div>
+              <p class="help">Type in 'DELETE' to delete a project on click.</p>
             </div>
-            <div class="message-body">{{ item.time }}</div>
-          </article>
-        </template>
-      </div>
-    </div>
-    <div class="footer" id="footer">
-      <div class="columns is-mobile">
-        <div class="column is-4">
-          <template v-if="loading">
-            <i class="fas fa-exclamation-circle is-danger"></i>
           </template>
-          <i class="fas fa-lightbulb" v-bind:class="{ danger: (device == null) }"></i>
-          <i class="fas fa-spa"></i>
-          <i class="fas fa-business-time" v-bind:class="{ active: (selectedProject.id != null) }"></i>
-          <i class="fas fa-hand-paper" v-bind:class="{ danger: (selectedProject.dnd == true) }"></i>
         </div>
-        <div class="column has-text-right" v-if="(selectedProject.id != null)">{{selectedProject.name}} since 14:21 (24 min)</div>
+        <div v-show="tab == 'mind'">
+            <div class="field">
+                <div class="control">
+                  <button class="button project-add" v-on:click="meditate()">
+                    Meditate
+                  </button>
+                </div>
+              </div>
+        </div>
+      </div>
+      <div class="footer" id="footer">
+        <div class="columns is-mobile">
+          <div class="column is-4">
+            <template v-if="loading">
+              <i class="fas fa-exclamation-circle is-danger"></i>
+            </template>
+            <i
+              class="fas fa-lightbulb"
+              v-bind:class="{ danger: (device == null) }"
+            ></i>
+            <i class="fas fa-spa"></i>
+            <i
+              class="fas fa-business-time"
+              v-bind:class="{ active: (selectedProject.id != null) }"
+            ></i>
+            <i
+              class="fas fa-hand-paper"
+              v-bind:class="{ danger: (selectedProject.dnd == true) }"
+            ></i>
+          </div>
+          <div
+            class="column has-text-right"
+            v-if="(selectedProject.id != null)"
+          >
+            {{ selectedProject.name }} since 14:21 (24 min)
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
+    <script>
+      // You can also require other files to run in this process
 
-
-
-  <script>
-    // You can also require other files to run in this process
-
-    require('./renderer.js')
-  </script>
-</body>
-
+      require("./renderer.js");
+    </script>
+  </body>
 </html>

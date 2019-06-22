@@ -155,3 +155,57 @@ i.active {
 .content {
   padding: 0.5rem;
 }
+
+.label:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.label {
+  color: #888888;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.input {
+  box-shadow: 0;
+  border-radius: 1px;
+  border-color: null;
+  background-color: #eee;
+}
+
+.field:not(:last-child) {
+  margin-bottom: 0px;
+}
+
+.select {
+  box-shadow: 0;
+  border-radius: 1px;
+  border-color: null;
+  background-color: #eee;
+}
+
+.project-add {
+  margin-top: 16px;
+}
+
+.content h1 {
+  font-size: 16px;
+  margin-bottom: 0.3em;
+  color: #888888;
+}
+
+.meditate {
+  background-color: transparent;
+}
+
+.meditate-window {
+  background-color: #363b44;
+  height: 300px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #56b6c2;
+  padding: 8px;
+}
+
+.is-cool {
+  color: #56b6c2;
+}
