@@ -7,6 +7,8 @@ let meditationWindow;
 let tray = null;
 let meditationWindowSender = null;
 
+let spaceKeyDown = false;
+
 function main () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -20,8 +22,8 @@ function main () {
 
   meditationWindow = new BrowserWindow({
     width: 800,
-    height: 800,
-    frame: true,
+    height: 370,
+    frame: false,
     transparent:true,
     webPreferences: {
       nodeIntegration: true
@@ -65,6 +67,23 @@ function main () {
   meditationWindow.setResizable(true);
   meditationWindow.hide();
 
+  meditationWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.code === 'Space') {
+      if (input.type === 'keyDown') {
+        if (!spaceKeyDown) {
+          setTimeout(() => {
+            if (spaceKeyDown) {
+              meditationWindow.hide();
+            }
+          }, 500);
+          spaceKeyDown = true;
+        }
+      } else {
+        spaceKeyDown = false;
+      }
+      //console.log(input);
+    }
+  });
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
@@ -98,13 +117,19 @@ app.on('activate', function () {
 ipcMain.on('meditate-ready', (event, args) => {
   meditationWindowSender = event.sender;
 });
-
+ 
 ipcMain.on('meditation-window', (event, args) => {
   if (meditationWindow) {
     meditationWindow.show();
     if (meditationWindowSender) {
       meditationWindowSender.send('meditate-data', args);
     }
+  }
+});
+
+ipcMain.on('meditate-window-hide', () => {
+  if (meditationWindow) {
+    meditationWindow.hide();
   }
 });
 

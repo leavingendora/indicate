@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <title>indicator-dev</title>
-    <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
+    <link rel="stylesheet" href="./node_modules/bulma/css/bulma.css" />
+    <link rel="stylesheet" href="./node_modules/bulma-switch/dist/css/bulma-switch.min.css" />
+    <link rel="stylesheet" href="./node_modules/bulma-slider/dist/css/bulma-slider.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" />
     <link rel="stylesheet" href="endora.css" />
   </head>
@@ -51,11 +53,10 @@
           </template>
 
           <template v-else>
-            <button
-              class="button project is-fullwidth dnd"
+
+            <button class="button project is-fullwidth dnd"
               v-bind:class="{ active: selectedProject.id === null }"
-              v-on:click="dnd()"
-            >
+              v-on:click="dnd()">
               <div class="project-body">
                 <nav class="level is-mobile is-fullwidth">
                   <div class="level-left">
@@ -68,11 +69,9 @@
               </div>
             </button>
 
-            <button
-              class="button project is-fullwidth powerOff"
+            <button class="button project is-fullwidth powerOff"
               v-bind:class="{ active: selectedProject.id === null }"
-              v-on:click="projectUnset()"
-            >
+              v-on:click="projectUnset()">
               <div class="project-body">
                 <nav class="level is-mobile is-fullwidth">
                   <div class="level-left">
@@ -252,6 +251,8 @@
           </template>
         </div>
         <div v-show="tab == 'mind'">
+            <meditate-comp v-bind:work="(selectedProject.id != null) ? true : false"></meditate-comp>
+
             <div class="field">
                 <div class="control">
                   <button class="button project-add" v-on:click="meditate()">
