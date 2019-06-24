@@ -17,15 +17,17 @@ var Meditate = new Vue({
   methods: {
     setupIPC() {
       console.log("setup");
-      ipc.on('meditate-data', (event, data) => {
-        this.timeOut = data.timeOut;
-        this.title = data.title;
-        this.type = data.type;
-        this.timeRemaining = data.timeOut;
+      ipc.on('meditate-data', (event, type, timeout, text) => {
+        this.timeOut = timeout;
+        this.title = text;
+        this.type = type;
+        this.timeRemaining =  this.timeOut;
         clearInterval(this.timer);
         this.timer = setInterval(this.timerHandling, 1000);
+
+
       });
-      ipc.send('meditate-ready');
+      ipc.send('meditate-window-ready');
     },
     timerHandling() {
       this.timeRemaining -= 1;

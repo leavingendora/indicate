@@ -6,6 +6,7 @@ let mainWindow;
 let meditationWindow;
 let tray = null;
 let meditationWindowSender = null;
+let meditationConfigSender = null;
 
 let spaceKeyDown = false;
 
@@ -23,7 +24,7 @@ function main () {
   meditationWindow = new BrowserWindow({
     width: 800,
     height: 370,
-    frame: false,
+    frame: true,
     transparent:true,
     webPreferences: {
       nodeIntegration: true
@@ -114,15 +115,19 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow();
 });
 
-ipcMain.on('meditate-ready', (event, args) => {
+ipcMain.on('meditate-window-ready', (event, args) => {
   meditationWindowSender = event.sender;
 });
+
+ipcMain.on('meditate-config-ready', (event, args) => {
+  meditationConfigSender = event.sender;
+});
  
-ipcMain.on('meditation-window', (event, args) => {
+ipcMain.on('meditation-window-show', (event, type, timeout, text) => {
   if (meditationWindow) {
     meditationWindow.show();
     if (meditationWindowSender) {
-      meditationWindowSender.send('meditate-data', args);
+      meditationWindowSender.send('meditate-data', type, timeout, text);
     }
   }
 });
@@ -130,6 +135,7 @@ ipcMain.on('meditation-window', (event, args) => {
 ipcMain.on('meditate-window-hide', () => {
   if (meditationWindow) {
     meditationWindow.hide();
+    meditationConfigSender.send('meditation-window-closed')
   }
 });
 

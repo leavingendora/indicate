@@ -19,8 +19,8 @@ Vue.component('meditate-comp-element', {
   template: `
   <div>
   <div class="field">
-    <input v-bind:id="'switch'+data.title" type="checkbox" v-bind:name="'switch'+data.title" class="switch is-rounded is-success is-small" v-model="data.switch">
-    <label v-bind:for="'switch'+data.title" class="switch-title">{{data.title}}</label>
+    <input v-bind:id="'switch'+data.type" type="checkbox" v-bind:name="'switch'+data.type" class="switch is-rounded is-success is-small" v-model="data.switch">
+    <label v-bind:for="'switch'+data.type" class="switch-title">{{data.type}}</label>
   </div>
   <div v-if="data.switch">
     <div class="field">
@@ -54,51 +54,87 @@ Vue.component('meditate-comp', {
     return {
       data: {
         meditate: {
-          title: "Mediation",
+          type: "Mediation",
           switch: true,
           text: "It's time to calm down.",
           time: 30, //timeout in mins
           duration: 30 //duration of window presence in secs
         },
         stretch: {
-          title: "Stretch",
+          type: "Stretch",
           switch: true,
           text: "Stretch!",
           time: 20,
           duration: 15
         },
         alarm: {
-          title: "Alarm",
+          type: "Alarm",
           switch: false,
           text: "Alarm",
           time: 10, 
           duration: 60
         }
       },
-      fileAccess: false
+      fileAccess: false,
+      windowOpen: false,
+      timers: {
+        meditate: null,
+        stretch: null,
+        alarm: null
+      }
    }
   },
   watch: {
+    work: function(work) {
+      this.adjustTimers(work);
+    },
     data: {
       handler(val) {
-        console.log("save ");
+        console.log("watch");
         if (this.fileAccess == false) {
           this.saveSettings();
         }
-        
+        this.data = val;
+
       },
       deep: true
     },
   },
   mounted: function() {
     this.readSettings();
+    ipc.send('meditate-config-ready');
+    ipc.on("meditation-window-closed", () => {
+      this.windowOpen = false;
+    });
   },
   methods: {
+    timerCallback(type, timeOut, text) {
+      if (this.windowOpen == false) {
+        this.windowOpen = true;
+        ipc.send('meditation-window-show', type, timeOut, text);
+      }
+    },
+    /* Clear and Set Timers */
+    adjustTimers(work) {
+      if (work == true) {
+        if (this.data.meditate.switch) this.timers.meditate = setInterval(() => {this.timerCallback("meditate")}, (this.data.meditate.time) * 1000);
+        if (this.data.meditate.stretch) this.timers.stretch = setInterval(() => {this.timerCallback("stretch")}, (this.data.stretch.time) * 1000 * 60);
+        if (this.data.meditate.alarm) this.timers.alarm = setInterval(() => {this.timerCallback("alarm")}, (this.data.alarm.time) * 1000 * 60);
+      } else {
+        /* DND while not working */
+        if (this.timers.meditate) clearInterval(this.timers.meditate);
+        if (this.timers.stretch) clearInterval(this.timers.stretch);
+        if (this.timers.alarm) clearInterval(this.timers.alarm);
+      }
+    },
+    /* Save Config */
     saveSettings() {
+      console.log(this.data.meditate.type);
       jsonfile.writeFile(meditationFile, this.data, (err)=> {
         if (err) console.error(err);
       })
     },
+    /* Read Config */
     readSettings() {
       this.fileAccess = true;
       jsonfile.readFile(meditationFile, (err, data) => {
@@ -233,7 +269,7 @@ var App = new Vue({
       this.selectedProject.dnd = false;
     },
     meditate() {
-      ipc.send('meditation-window', {type: 'Meditation', timeOut: 30, title: 'Take a deep breath'});
+      ipc.send('meditation-window-show', {type: 'Meditation', timeOut: 30, title: 'Take a deep breath'});
     },
     dnd() {
       if (device) {
