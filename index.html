@@ -252,14 +252,6 @@
         </div>
         <div v-show="tab == 'mind'">
             <meditate-comp v-bind:work="(selectedProject.id != null) ? true : false"></meditate-comp>
-
-            <div class="field">
-                <div class="control">
-                  <button class="button project-add" v-on:click="meditate()">
-                    Meditate
-                  </button>
-                </div>
-              </div>
         </div>
       </div>
       <div class="footer" id="footer">

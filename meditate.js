@@ -16,7 +16,6 @@ var Meditate = new Vue({
   },
   methods: {
     setupIPC() {
-      console.log("setup");
       ipc.on('meditate-data', (event, type, timeout, text) => {
         this.timeOut = timeout;
         this.title = text;

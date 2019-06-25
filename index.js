@@ -24,7 +24,7 @@ function main () {
   meditationWindow = new BrowserWindow({
     width: 800,
     height: 370,
-    frame: true,
+    frame: false,
     transparent:true,
     webPreferences: {
       nodeIntegration: true
@@ -126,6 +126,7 @@ ipcMain.on('meditate-config-ready', (event, args) => {
 ipcMain.on('meditation-window-show', (event, type, timeout, text) => {
   if (meditationWindow) {
     meditationWindow.show();
+    meditationWindow.focus();
     if (meditationWindowSender) {
       meditationWindowSender.send('meditate-data', type, timeout, text);
     }

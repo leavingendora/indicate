@@ -207,7 +207,14 @@ i.active {
   margin: 16px;
 }
 
+.meditate-window.alarm {
+  box-shadow: 0 0 20px #e06c75;
+  color: #ff0000;
+}
 
+.meditate-window > .title.white {
+  color: #ffffff;
+}
 
 .progress.is-cool::-webkit-progress-value {
   background-color: #56b6c2;

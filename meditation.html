@@ -8,9 +8,9 @@
   </head>
 
   <body>
-    <div id="meditate" class="meditate-window">
+    <div id="meditate" class="meditate-window" v-bind:class="{alarm: (type==='Alarm')}">
         
-      <h1 class="title">{{title}}<button class="delete is-medium" v-on:click="hide()"></button></h1>
+      <h1 class="title white">{{title}}<button class="delete is-medium" v-on:click="hide()"></button></h1>
 
       <h2 class="subtitle">{{type}}</h2>
       <progress class="progress is-large is-cool" v-bind:value="timeOut - timeRemaining" v-bind:max="timeOut"></progress>

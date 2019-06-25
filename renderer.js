@@ -50,7 +50,7 @@ Vue.component('meditate-comp-element', {
 
 Vue.component('meditate-comp', {
   props: ['work'],
-  data: function() {
+  data() {
     return {
       data: {
         meditate: {
@@ -90,12 +90,11 @@ Vue.component('meditate-comp', {
     },
     data: {
       handler(val) {
-        console.log("watch");
         if (this.fileAccess == false) {
           this.saveSettings();
         }
-        this.data = val;
-
+        this.adjustTimers(this.work);
+       
       },
       deep: true
     },
@@ -108,18 +107,39 @@ Vue.component('meditate-comp', {
     });
   },
   methods: {
-    timerCallback(type, timeOut, text) {
+    timerCallback(dataset) {
+      console.log("timer check");
       if (this.windowOpen == false) {
         this.windowOpen = true;
+
+        let type, timeOut, text;
+
+        if (dataset === "alarm") {
+          type = this.data.alarm.type;
+          timeOut = this.data.alarm.duration;
+          text = this.data.alarm.text;
+          this.data.alarm.switch = false;
+          if (this.timers.alarm) clearInterval(this.timers.alarm);
+
+        } else if (dataset === "stretch") {
+          type = this.data.stretch.type;
+          timeOut = this.data.stretch.duration;
+          text = this.data.stretch.text;
+        } else {
+          type = this.data.meditate.type;
+          timeOut = this.data.meditate.duration;
+          text = this.data.meditate.text;
+        }
+
         ipc.send('meditation-window-show', type, timeOut, text);
       }
     },
     /* Clear and Set Timers */
     adjustTimers(work) {
       if (work == true) {
-        if (this.data.meditate.switch) this.timers.meditate = setInterval(() => {this.timerCallback("meditate")}, (this.data.meditate.time) * 1000);
-        if (this.data.meditate.stretch) this.timers.stretch = setInterval(() => {this.timerCallback("stretch")}, (this.data.stretch.time) * 1000 * 60);
-        if (this.data.meditate.alarm) this.timers.alarm = setInterval(() => {this.timerCallback("alarm")}, (this.data.alarm.time) * 1000 * 60);
+        if (this.data.alarm.switch) this.timers.alarm = setInterval(() => {this.timerCallback("alarm")}, this.data.alarm.time * 1000 * 60);
+        if (this.data.stretch.switch) this.timers.stretch = setInterval(() => {this.timerCallback("stretch")}, this.data.stretch.time * 1000 * 60);
+        if (this.data.meditate.switch) this.timers.meditate = setInterval(() => {this.timerCallback("meditate")}, this.data.meditate.time * 1000 * 60);
       } else {
         /* DND while not working */
         if (this.timers.meditate) clearInterval(this.timers.meditate);
@@ -129,7 +149,6 @@ Vue.component('meditate-comp', {
     },
     /* Save Config */
     saveSettings() {
-      console.log(this.data.meditate.type);
       jsonfile.writeFile(meditationFile, this.data, (err)=> {
         if (err) console.error(err);
       })
@@ -139,7 +158,11 @@ Vue.component('meditate-comp', {
       this.fileAccess = true;
       jsonfile.readFile(meditationFile, (err, data) => {
         if (err) console.error(err);
+        // console.log(this.data.meditate.type);
+        // console.log(data.meditate.type);
+        // console.log(data.meditate.type === this.data.meditate.type)
         this.data = data;
+        // console.log(data.meditate.type === this.data.meditate.type)
         this.fileAccess = false;
       });
     }
@@ -153,7 +176,6 @@ Vue.component('meditate-comp', {
       <hr>
       <meditate-comp-element v-bind:data="data.alarm"></meditate-comp-element>
       <hr>
-      <button v-on:click="readSettings()">test</button>
     </div>
     `
 });
@@ -245,7 +267,6 @@ var App = new Vue({
     projectAdd() {
       client.request('addProject', {name: this.newProject.name, icon: this.newProject.icon, color: this.newProject.color}, (err, response) => {
         if(err) throw err;
-        console.log(response.result);
         this.projectGetData();
       });
     },
