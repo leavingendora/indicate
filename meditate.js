@@ -23,8 +23,6 @@ var Meditate = new Vue({
         this.timeRemaining =  this.timeOut;
         clearInterval(this.timer);
         this.timer = setInterval(this.timerHandling, 1000);
-
-
       });
       ipc.send('meditate-window-ready');
     },
