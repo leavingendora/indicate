@@ -15,7 +15,6 @@ if (device) {
         4, 0, 0,
     ];
 
-    
     device.setColors(0, data, function(err, data) {
         finished = true;
     });
