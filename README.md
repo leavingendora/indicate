@@ -2,6 +2,7 @@
 Work status and project indicator using Blinkstick used by Leaving Endora.
 
 ## Project Outlines
+
 * Electron
 * Silent office indication (DND)
 * Project color (breathing)
@@ -11,11 +12,11 @@ Work status and project indicator using Blinkstick used by Leaving Endora.
 * Stretch & relax module
 
 ## Todos
+
 - [ ] Update time correction and better output
 - [ ] Star fav projects
 - [ ] Status bar: alarm indication, timestamp started
-- [ ] Project Edit, Css adaptions
+- [ ] Project Edit, CSS adaptions
 - [ ] Tray, Window positioning, shortcut, focus on alarm (https://github.com/robinwassen/forcefocus)
 - [ ] Configurable server IP
 - [ ] Beautify server outputs
-
